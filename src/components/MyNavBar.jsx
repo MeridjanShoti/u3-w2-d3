@@ -3,16 +3,18 @@ import Nav from "react-bootstrap/Nav";
 import Navbar from "react-bootstrap/Navbar";
 import logo from "../assets/netflix_logo.png";
 import { Col, Form, Row } from "react-bootstrap";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Bell, Search } from "react-bootstrap-icons";
 import { Dropdown } from "react-bootstrap";
 import propic from "../assets/avatar.png";
 import kidsIcon from "../assets/kids_icon.png";
-import { Link } from "react-router";
-function MyNavBar(props) {
+import { Link, useLocation } from "react-router";
+function MyNavBar() {
   const [searchBarShow, setSearchBarShow] = useState(false);
   const [searchedItem, setSearchedItem] = useState("false");
   const [searchedMovies, setSearchedMovies] = useState([]);
+  const [clickedMovie, setClickedMovie] = useState("");
+  const location = useLocation();
   const handleSearch = (e) => {
     setSearchedItem(e.target.value);
   };
@@ -41,14 +43,17 @@ function MyNavBar(props) {
       })
       .catch((error) => console.error("ERRORE:", error));
   };
-
+  useEffect(() => {
+    fetchSearch();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [clickedMovie]);
   return (
     <div className="bg-dark">
       <Navbar expand="lg" className="bg-dark navbar-dark">
         <Container>
-          <Navbar.Brand href="#home" onClick={() => props.changeState("home")}>
+          <Link to="/">
             <img src={logo} alt="logo" width="100px" />
-          </Navbar.Brand>
+          </Link>
           <Navbar.Toggle aria-controls="basic-navbar-nav" className="border border-white" />
           <Navbar.Collapse id="basic-navbar-nav">
             <Nav className="me-auto">
@@ -75,7 +80,7 @@ function MyNavBar(props) {
                 <Col xs="auto">
                   <Form.Control
                     type="text"
-                    placeholder="Search"
+                    placeholder={location.pathname === "/tvshows" ? "cerca serie tv" : "cerca"}
                     className={searchBarShow === true ? "mr-sm-2" : "mr-sm-2 d-none"}
                     id="searchBar"
                     onChange={handleSearch}
@@ -117,12 +122,14 @@ function MyNavBar(props) {
           {searchedMovies !== null &&
             searchedMovies.map((movie) => (
               <Col key={movie.imdbID} xs={6} md={4} lg={2} className="p-1">
-                <img
-                  src={movie.Poster}
-                  alt={movie.Title}
-                  style={{ width: "100%", aspectRatio: "4/3", objectFit: "cover" }}
-                  className="filmPoster"
-                ></img>
+                <Link to={"/moviedetails/" + movie.imdbID} onClick={() => setClickedMovie(movie.imdbID)}>
+                  <img
+                    src={movie.Poster}
+                    alt={movie.Title}
+                    style={{ width: "100%", aspectRatio: "4/3", objectFit: "cover" }}
+                    className="filmPoster"
+                  ></img>
+                </Link>
               </Col>
             ))}
         </Row>

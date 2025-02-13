@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { Col, Row } from "react-bootstrap";
+import { Link } from "react-router";
 
 function MyFilmRow(props) {
   const [movies, setMovies] = useState([]);
@@ -19,12 +20,14 @@ function MyFilmRow(props) {
     <Row>
       {movies.map((movie) => (
         <Col key={movie.imdbID} xs={6} md={4} lg={2} className="p-1">
-          <img
-            src={movie.Poster}
-            alt={movie.Title}
-            style={{ width: "100%", aspectRatio: "4/3", objectFit: "cover" }}
-            className="filmPoster"
-          ></img>
+          <Link to={"/moviedetails/" + movie.imdbID}>
+            <img
+              src={movie.Poster}
+              alt={movie.Title}
+              style={{ width: "100%", aspectRatio: "4/3", objectFit: "cover" }}
+              className="filmPoster"
+            ></img>
+          </Link>
         </Col>
       ))}
     </Row>

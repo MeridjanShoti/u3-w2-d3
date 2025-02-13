@@ -7,6 +7,7 @@ import Account from "./components/Account.jsx";
 
 import { BrowserRouter, Link, Route, Routes } from "react-router";
 import TvShows from "./components/TvShows.jsx";
+import Details from "./components/Details.jsx";
 function App() {
   return (
     <BrowserRouter>
@@ -40,7 +41,7 @@ function App() {
             </div>
           }
         />
-
+        <Route path="/moviedetails/:movieId" element={<Details />} />
         <Route
           path="*"
           element={
